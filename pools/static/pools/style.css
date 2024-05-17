@@ -5,3 +5,12 @@ li a {
 body {
     background: white url("images/background.png") no-repeat;
 }
+
+.submit-button {
+    background-color: #ff0000; /* Cor de fundo vermelha */
+    color: #ffffff; /* Cor do texto branca */
+    padding: 10px 20px; /* Espaçamento interno */
+    border: none; /* Remover borda */
+    border-radius: 5px; /* Adicionar borda arredondada */
+    cursor: pointer; /* Mudar cursor ao passar por cima */
+}
