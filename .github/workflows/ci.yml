@@ -33,7 +33,11 @@ jobs:
     - name: Run migrations
       run: |
         ./.venv/bin/python manage.py migrate
+      env:
+        DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
 
     - name: Run tests
       run: |
         ./.venv/bin/python manage.py test
+      env:
+        DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
