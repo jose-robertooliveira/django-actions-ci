@@ -6,31 +6,34 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    secrets:
-      DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}  # Define secrets here
-
     env:
-      DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}  # Access secrets here
+      DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
 
     steps:
-      - uses: actions/checkout@v2
+    - uses: actions/checkout@v2
 
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.10'
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.10'
 
-      - name: Install Poetry
-        run: |
-          curl -sSL https://install.python-poetry.org | python3 -
-          echo 'export PATH="$HOME/.local/bin:$PATH"' >> $GITHUB_ENV
-        shell: bash
+    - name: Install Poetry
+      run: |
+        curl -sSL https://install.python-poetry.org | python3 -
+        echo 'export PATH="$HOME/.local/bin:$PATH"' >> $GITHUB_ENV
+      shell: bash
 
-      - name: Install dependencies
-        run: poetry add django
+    - name: Install dependencies
+      run: |
+        poetry config virtualenvs.in-project true
+        poetry install
+      env:
+        POETRY_VIRTUALENVS_CREATE: true
 
-      - name: Run migrations
-        run: poetry run python manage.py migrate
+    - name: Run migrations
+      run: |
+        ./.venv/bin/python manage.py migrate
 
-      - name: Run tests
-        run: poetry run python manage.py test
+    - name: Run tests
+      run: |
+        ./.venv/bin/python manage.py test
