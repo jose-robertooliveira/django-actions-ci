@@ -23,23 +23,21 @@ jobs:
         echo 'export PATH="$HOME/.local/bin:$PATH"' >> $GITHUB_ENV
       shell: bash
 
-    - name: Configure Poetry
-      run: |
-        echo 'export POETRY_VIRTUALENVS_CREATE=true' >> $GITHUB_ENV
-        echo 'export POETRY_VIRTUALENVS_IN_PROJECT=true' >> $GITHUB_ENV
-      shell: bash
-
     - name: Install dependencies
       run: |
-        source $HOME/.poetry/env
+        poetry config virtualenvs.in-project true
         poetry install
+      env:
+        POETRY_VIRTUALENVS_CREATE: true
 
     - name: Run migrations
       run: |
-        source $HOME/.poetry/env
-        poetry run python manage.py migrate
+        ./.venv/bin/python manage.py migrate
+      env:
+        DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
 
     - name: Run tests
       run: |
-        source $HOME/.poetry/env
-        poetry run python manage.py test
+        ./.venv/bin/python manage.py test
+      env:
+        DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
